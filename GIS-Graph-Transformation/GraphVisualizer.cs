@@ -6,7 +6,7 @@ using Microsoft.Msagl.Drawing;
 
 namespace GIS_Graph_Transformation
 {
-    class GraphVisualizer
+    public class GraphVisualizer
     {
         private Form _form;
 

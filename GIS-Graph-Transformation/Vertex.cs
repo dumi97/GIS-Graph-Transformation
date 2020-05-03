@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GIS_Graph_Transformation
 {
-    class Vertex
+    public class Vertex
     {
         public List<Pair> InEdge { get; private set; }
         public List<Pair> OutEdge { get; private set; }

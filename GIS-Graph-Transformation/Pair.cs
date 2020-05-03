@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GIS_Graph_Transformation
 {
-    class Pair
+    public class Pair
     {
         public string Id;
         public string Vertex;
