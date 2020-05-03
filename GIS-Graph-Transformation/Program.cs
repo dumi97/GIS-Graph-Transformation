@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 
 namespace GIS_Graph_Transformation
 {
@@ -12,6 +7,7 @@ namespace GIS_Graph_Transformation
         static void Main()
         {
             DataIO dio = new DataIO();
+            VertexToEdge vte = new VertexToEdge();
             GraphVisualizer inputVisualizer = new GraphVisualizer();
             GraphVisualizer outputVisualizer = new GraphVisualizer();
 
@@ -36,6 +32,9 @@ namespace GIS_Graph_Transformation
                 );
             graph.Add("C", temp);
             // SAMPLE GRAPH END
+
+            // PLACEHOLDER
+            vte.Transform(graph);
 
             inputVisualizer.Visualize(dio.LoadGraph(), "Test Input graph");
             dio.SaveGraph(graph);

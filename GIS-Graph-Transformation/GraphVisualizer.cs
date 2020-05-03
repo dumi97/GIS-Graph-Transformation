@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.Msagl.Drawing;
