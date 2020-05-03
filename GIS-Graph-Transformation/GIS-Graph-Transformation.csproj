@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataIO.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="GraphVisualizer.cs" />
     <Compile Include="Program.cs" />

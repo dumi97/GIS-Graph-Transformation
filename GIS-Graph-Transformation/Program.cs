@@ -11,9 +11,12 @@ namespace GIS_Graph_Transformation
     {
         static void Main()
         {
-            GraphVisualizer gv = new GraphVisualizer();
-            Vertex temp;
+            DataIO dio = new DataIO();
+            GraphVisualizer inputVisualizer = new GraphVisualizer();
+            GraphVisualizer outputVisualizer = new GraphVisualizer();
 
+            // SAMPLE GRAPH
+            Vertex temp;
             Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
             temp = new Vertex(
                 null,
@@ -32,8 +35,11 @@ namespace GIS_Graph_Transformation
                 null
                 );
             graph.Add("C", temp);
+            // SAMPLE GRAPH END
 
-            gv.Visualize(graph);
+            inputVisualizer.Visualize(dio.LoadGraph(), "Test Input graph");
+            dio.SaveGraph(graph);
+            outputVisualizer.Visualize(graph, "Test Output graph");
         }
     }
 }

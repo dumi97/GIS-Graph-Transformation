@@ -35,7 +35,7 @@ namespace GIS_Graph_Transformation_Tests
         }
 
         [Test]
-        public void EqualsTests()
+        public void EqualsTest()
         {
             Assert.AreEqual(_p1, _p2, "Points 1 and 2 are not equal");
             Assert.AreNotEqual(_p1, _p3, "Points 1 and 3 are equal");

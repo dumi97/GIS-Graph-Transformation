@@ -37,12 +37,12 @@ namespace GIS_Graph_Transformation
             _viewer.Graph = _graph;
             //associate the viewer with the form 
             _form.SuspendLayout();
+            _form.Text = graphName;
             _viewer.Dock = DockStyle.Fill;
             _form.Controls.Add(_viewer);
             _form.ResumeLayout();
             //show the form 
             _form.ShowDialog();
-            //Console.ReadKey();
         }
 
         public void Close()
