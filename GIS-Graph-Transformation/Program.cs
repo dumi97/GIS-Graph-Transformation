@@ -11,6 +11,7 @@ namespace GIS_Graph_Transformation
             GraphVisualizer inputVisualizer = new GraphVisualizer();
             GraphVisualizer outputVisualizer = new GraphVisualizer();
 
+            /*
             // SAMPLE GRAPH
             Vertex temp;
             Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
@@ -38,7 +39,11 @@ namespace GIS_Graph_Transformation
 
             inputVisualizer.Visualize(dio.LoadGraph(), "Test Input graph");
             dio.SaveGraph(graph);
+            
             outputVisualizer.Visualize(graph, "Test Output graph");
+            */
+
+            outputVisualizer.Visualize(dio.GenerateGraph(), "Test Generated graph");
         }
     }
 }

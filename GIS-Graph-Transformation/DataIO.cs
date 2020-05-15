@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Msagl.Drawing;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GIS_Graph_Transformation
 {
@@ -56,13 +58,49 @@ namespace GIS_Graph_Transformation
             }
         }
 
-        public Dictionary<string, Vertex> GenerateGraph()
+        public Dictionary<string, Vertex> GenerateGraph(int vertexCount = 30, int maxVertexDistance = 2)
         {
             Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
+            Dictionary<string, int> layers = new Dictionary<string, int>();
+            int vertexSequence = 0;
+            Random rand = new Random();
 
-            //TODO
-            Console.WriteLine("TODO");
+            // insert inital vertex
+            graph[(++vertexSequence).ToString()] = new Vertex();
+            layers[vertexSequence.ToString()] = 0;
+            
+            // build graph
+            for(int i = 0; i < vertexCount-1; ++i)
+            {
+                Vertex newVert = new Vertex();
+                string newVertId = (++vertexSequence).ToString();
+                int newVertLayer;
 
+                // select random vertex id
+                List<string> values = Enumerable.ToList(graph.Keys);
+                string randVertexId = values[rand.Next(values.Count)];
+
+                // get random distance (must be in <1,maxVertexDistance> range)
+                int dist = rand.Next(maxVertexDistance) + 1;
+
+                // insert forward or backward
+                if(rand.Next(2) == 0) // forward
+                {
+                    newVert.AddInEdge(" ", randVertexId);
+                    graph[randVertexId].AddOutEdge(" ", newVertId);
+                    newVertLayer = layers[randVertexId] + dist;
+                }
+                else // backward
+                {
+                    newVert.AddOutEdge(" ", randVertexId);
+                    graph[randVertexId].AddInEdge(" ", newVertId);
+                    newVertLayer = layers[randVertexId] - dist;
+                }
+
+                layers[newVertId] = newVertLayer;
+                graph[newVertId] = newVert;
+            }
+            
             return graph;
         }
     }
