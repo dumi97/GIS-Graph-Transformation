@@ -20,7 +20,7 @@ namespace GIS_Graph_Transformation
             GViewer _viewer = new GViewer();
             Graph _graph = new Graph(graphName)
             {
-                LayoutAlgorithmSettings = new Microsoft.Msagl.Prototype.Ranking.RankingLayoutSettings()
+                LayoutAlgorithmSettings = new Microsoft.Msagl.Layout.Layered.SugiyamaLayoutSettings()
             };
 
             foreach (KeyValuePair<string, Vertex> v in inputGraph)

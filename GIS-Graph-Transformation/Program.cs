@@ -43,7 +43,7 @@ namespace GIS_Graph_Transformation
             outputVisualizer.Visualize(graph, "Test Output graph");
             */
 
-            outputVisualizer.Visualize(dio.GenerateGraph(), "Test Generated graph");
+            outputVisualizer.Visualize(dio.GenerateGraph(renumerate:true), "Test Generated graph");
         }
     }
 }

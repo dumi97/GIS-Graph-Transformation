@@ -17,23 +17,28 @@ namespace GIS_Graph_Transformation
                 return GenerateGraph();
             }
 
-            Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
             // load data from file
             char[] delims = { '\t', '\n', '\r', ' ' };
             string[] edges = File.ReadAllText(fileName)
                 .Split(delims, StringSplitOptions.RemoveEmptyEntries);
+            return StringsToGraph(edges);
+        }
+
+        private Dictionary<string, Vertex> StringsToGraph(string[] graphStrings)
+        {
+            Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
 
             // check if data is valid
-            if(edges.Length % 2 != 0)
+            if (graphStrings.Length % 2 != 0)
             {
                 Console.WriteLine("[WARNING] Input graph invalid - one edge has no target vertex");
                 return graph;
             }
 
             // create the graph
-            for (int i = 0; i < edges.Length - 1; i += 2)
+            for (int i = 0; i < graphStrings.Length - 1; i += 2)
             {
-                string from = edges[i], to = edges[i + 1];
+                string from = graphStrings[i], to = graphStrings[i + 1];
 
                 // check if the graph contains current vertices
                 if (!graph.ContainsKey(from))
@@ -58,9 +63,10 @@ namespace GIS_Graph_Transformation
             }
         }
 
-        public Dictionary<string, Vertex> GenerateGraph(int vertexCount = 30, int maxVertexDistance = 2)
+        public Dictionary<string, Vertex> GenerateGraph(int vertexCount = 30, int maxVertexDistance = 3, bool renumerate = false)
         {
             Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
+            string graphString = "";
             Dictionary<string, int> layers = new Dictionary<string, int>();
             int vertexSequence = 0;
             Random rand = new Random();
@@ -72,35 +78,66 @@ namespace GIS_Graph_Transformation
             // build graph
             for(int i = 0; i < vertexCount-1; ++i)
             {
+                // create new vertex
                 Vertex newVert = new Vertex();
                 string newVertId = (++vertexSequence).ToString();
                 int newVertLayer;
 
-                // select random vertex id
+                // select random vertex id from current graph
                 List<string> values = Enumerable.ToList(graph.Keys);
                 string randVertexId = values[rand.Next(values.Count)];
 
-                // get random distance (must be in <1,maxVertexDistance> range)
+                // get a random distance (must be in <1,maxVertexDistance> range)
                 int dist = rand.Next(maxVertexDistance) + 1;
 
-                // insert forward or backward
-                if(rand.Next(2) == 0) // forward
+                // insert new vertex in front or behind selected vetex
+                if(rand.Next(2) == 0) // in front
                 {
                     newVert.AddInEdge(" ", randVertexId);
                     graph[randVertexId].AddOutEdge(" ", newVertId);
                     newVertLayer = layers[randVertexId] + dist;
+                    graphString += $"{randVertexId} {newVertId} ";
                 }
-                else // backward
+                else // behind
                 {
                     newVert.AddOutEdge(" ", randVertexId);
                     graph[randVertexId].AddInEdge(" ", newVertId);
                     newVertLayer = layers[randVertexId] - dist;
+                    graphString += $"{newVertId} {randVertexId} ";
                 }
 
                 layers[newVertId] = newVertLayer;
                 graph[newVertId] = newVert;
             }
             
+            if(renumerate)
+            {
+                vertexSequence = 0;
+
+                // all vertices with no input edges are on the lowest layer
+                foreach (var entry in layers.ToList())
+                    if (graph[entry.Key].InEdge.Count == 0)
+                        layers[entry.Key] = int.MinValue;
+
+                // sort vertices by their layer
+                List<KeyValuePair<string, int>> sortedLayers = layers.ToList();
+                sortedLayers.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+                Dictionary<int, int> idMapping = new Dictionary<int, int>();
+
+                // create ID mappings
+                foreach (KeyValuePair<string, int> entry in sortedLayers)
+                    idMapping[int.Parse(entry.Key)] = ++vertexSequence;
+
+                // renumerate all vertices using graph string representation
+                string[] edges = graphString.Trim()
+                    .Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < edges.Length; ++i)
+                    edges[i] = idMapping[int.Parse(edges[i])].ToString();
+
+                // convert graph string representation to dictionary representation
+                graph = StringsToGraph(edges);
+            }
+
             return graph;
         }
     }
