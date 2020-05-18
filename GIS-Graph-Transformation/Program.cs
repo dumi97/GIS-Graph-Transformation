@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GIS_Graph_Transformation
 {
@@ -43,7 +46,26 @@ namespace GIS_Graph_Transformation
             outputVisualizer.Visualize(graph, "Test Output graph");
             */
 
-            outputVisualizer.Visualize(dio.GenerateGraph(renumerate:true), "Test Generated graph");
+            Dictionary<string, Vertex> graph = dio.LoadGraph();
+            //Dictionary<string, Vertex> graph = dio.GenerateGraph(renumerate: true);
+            inputVisualizer.Visualize(graph, "Test Generated graph");
+            outputVisualizer.Visualize(vte.Transform(graph), "Vertex to edge graph");
+
+            /* Nie działa, bo coś te podprogramy się nie zamykają jak powinny
+            Task[] tasks = new Task[2];
+            tasks[0] = Task.Run(() => { inputVisualizer.Visualize(graph, "Test Generated graph"); });
+            tasks[1] = Task.Run(() => { outputVisualizer.Visualize(vte.Transform(graph), "Vertex to edge graph"); });
+            try
+            {
+                Task.WaitAll(tasks);
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine("One or more exceptions occurred: ");
+                foreach (var ex in ae.Flatten().InnerExceptions)
+                    Console.WriteLine("   {0}", ex.Message);
+            }
+            */
         }
     }
 }

@@ -24,9 +24,9 @@ namespace GIS_Graph_Transformation
             InEdge.Add(new Pair(id, from));
         }
 
-        public void AddOutEdge(string id, string from)
+        public void AddOutEdge(string id, string to)
         {
-            OutEdge.Add(new Pair(id, from));
+            OutEdge.Add(new Pair(id, to));
         }
 
         public void RemoveInEdge(Pair edge)
