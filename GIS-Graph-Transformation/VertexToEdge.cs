@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Msagl.Drawing;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace GIS_Graph_Transformation
                 //Weź poprzedniki i następniki z oryginalnego grafu
                 Vertex value;
                 inputGraph.TryGetValue(v, out value);
-                //Znajdź krawędź, która powinna już istnieć
+                //Znajdź krawędź, która może już istnieć
                 KeyValuePair<string, string> valuePair;
                 addedEdges.TryGetValue(v, out valuePair);
 
@@ -62,18 +63,19 @@ namespace GIS_Graph_Transformation
                         if (valueNext.OutEdge.Count > 0)
                             V.Enqueue(value.OutEdge[i].Vertex);
                     }
+
                     if (valueNext.InEdge.Count == 1)
                         AddTrueEdge(graph, valuePair.Value, value.OutEdge[i].Vertex, vertex);
                     else if(valueNext.InEdge.Count > 1)
                     {
                         if(ifExist)
-                            AddFictionalEdgeWhenExist(graph, valuePair.Value, "null", valuePairNext.Key);
+                            AddFictionalEdge(graph, valuePair.Value, "null", valuePairNext.Key);
                         else
                         {
                             string temp = vertex;
                             incrementVertex();
                             AddTrueEdge(graph, temp, value.OutEdge[i].Vertex, vertex);
-                            AddFictionalEdgeWhenExist(graph, valuePair.Value, "null", temp);
+                            AddFictionalEdge(graph, valuePair.Value, "null", temp);
                         }
                     }
                 }
@@ -116,7 +118,7 @@ namespace GIS_Graph_Transformation
             addedEdges.Add(id, new KeyValuePair<string, string>(from, to));
             incrementVertex();
         }
-        private void AddFictionalEdgeWhenExist(Dictionary<string, Vertex> graph, string from, string id, string to)
+        private void AddFictionalEdge(Dictionary<string, Vertex> graph, string from, string id, string to)
         {
             graph[from].AddOutEdge(id, to);
             if (!graph.ContainsKey(to))
@@ -128,13 +130,26 @@ namespace GIS_Graph_Transformation
         // Alphabetical increment for edges
         private void incrementVertex()
         {
-            char x = vertex.Last();
-            if(x == 'Z')
+            for(int i=vertex.Length-1; i>=0; i--)
             {
-                Console.WriteLine("TODO");
+                if (vertex[i] == 'Z')
+                {
+                    vertex = vertex.Remove(i, 1);
+                    vertex = vertex.Insert(i, "A");
+                    if (i == 0)
+                    {
+                        vertex = vertex.Insert(i, "A");
+                        return;
+                    }
+                }
+                else
+                {
+                    char x = (char)vertex[i];
+                    vertex = vertex.Remove(i, 1);
+                    vertex = vertex.Insert(i, (++x).ToString());
+                    return;
+                }
             }
-            else
-                vertex = vertex.Remove(vertex.Length - 1, 1) + ++x;
         }
     }
 }
