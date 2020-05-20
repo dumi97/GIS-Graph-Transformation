@@ -12,15 +12,21 @@ namespace GIS_Graph_Transformation
         private Dictionary<string, KeyValuePair<string, string> > addedEdges;
         public VertexToEdge()
         {
+            ResetAll();
+        }
+
+        private void ResetAll()
+        {
             vertex = "B";
             addedEdges = new Dictionary<string, KeyValuePair<string, string>>();
         }
 
-        public Dictionary<string, Vertex> Transform(Dictionary<string, Vertex> inputGraph)
+        public Dictionary<string, Vertex> Transform(Dictionary<string, Vertex> inputGraph, bool reletter = false)
         {
             Queue<string> V = new Queue<string>();
             Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
             graph.Add("A", new Vertex());
+            ResetAll();
 
             foreach (string g in inputGraph.Keys)
             {
@@ -73,7 +79,7 @@ namespace GIS_Graph_Transformation
                         else
                         {
                             string temp = vertex;
-                            incrementVertex();
+                            IncrementVertex();
                             AddTrueEdge(graph, temp, value.OutEdge[i].Vertex, vertex);
                             AddFictionalEdge(graph, valuePair.Value, "null", temp);
                         }
@@ -104,7 +110,7 @@ namespace GIS_Graph_Transformation
             for (int i = 0; i < toDelete.Count; ++i)
                 graph.Remove(toDelete[i]);
 
-            return graph;
+            return reletter ? ReletterGraph(graph) : graph;
         }
 
         private void AddTrueEdge(Dictionary<string, Vertex> graph, string from, string id, string to)
@@ -116,7 +122,7 @@ namespace GIS_Graph_Transformation
                 graph.Add(to, new Vertex());
             graph[to].AddInEdge(id, from);
             addedEdges.Add(id, new KeyValuePair<string, string>(from, to));
-            incrementVertex();
+            IncrementVertex();
         }
         private void AddFictionalEdge(Dictionary<string, Vertex> graph, string from, string id, string to)
         {
@@ -124,11 +130,11 @@ namespace GIS_Graph_Transformation
             if (!graph.ContainsKey(to))
                 graph.Add(to, new Vertex());
             graph[to].AddInEdge(id, from);
-            incrementVertex();
+            IncrementVertex();
         }
 
         // Alphabetical increment for edges
-        private void incrementVertex()
+        private void IncrementVertex()
         {
             for(int i=vertex.Length-1; i>=0; i--)
             {
@@ -150,6 +156,53 @@ namespace GIS_Graph_Transformation
                     return;
                 }
             }
+        }
+
+        /**
+         * <summary>
+         * Reletters the graph so that the vertices are lettered continuously.
+         * For aestethic purposes only. Should not be used in benchmarking.
+         * </summary>
+         * <param name="graph">The graph to be relettered; Should be sorted by key values.</param>
+         */
+        private Dictionary<string, Vertex> ReletterGraph(Dictionary<string, Vertex> graph)
+        {
+            Dictionary<string, Vertex> outGraph = new Dictionary<string, Vertex>();
+            Dictionary<string, string> letterMapping = new Dictionary<string, string>();
+            string graphString = "";
+            vertex = "A";
+
+            // create graph string representation
+            foreach (KeyValuePair<string, Vertex> v in graph)
+            {
+                letterMapping[v.Key] = vertex;
+                IncrementVertex();
+                foreach (Pair e in v.Value.OutEdge)
+                    graphString += $"{v.Key} {e.Id} {e.Vertex} ";
+            }
+                
+
+            // renumerate all vertices using graph string representation
+            string[] edges = graphString.Trim()
+                .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < edges.Length; i+=3)
+            {
+                string from = letterMapping[edges[i]];
+                string edgeId = edges[i + 1];
+                string to = letterMapping[edges[i + 2]];
+
+                // check if the graph contains current vertices
+                if (!outGraph.ContainsKey(from))
+                    outGraph[from] = new Vertex();
+                if (!outGraph.ContainsKey(to))
+                    outGraph[to] = new Vertex();
+
+                outGraph[from].AddOutEdge(edgeId, to);
+                outGraph[to].AddInEdge(edgeId, from);
+            }
+                
+
+            return outGraph;
         }
     }
 }
