@@ -38,5 +38,32 @@ namespace GIS_Graph_Transformation_Tests
                 Assert.Fail("Null reference exception while constructiong objects");
             }
         }
+
+        [Test]
+        public void AddRemoveEdgeTest()
+        {
+            Vertex test1 = new Vertex();
+
+            Assert.AreEqual(0, test1.InEdge.Count, "Vertex constructed with unexpected in-edges");
+            Assert.AreEqual(0, test1.OutEdge.Count, "Vertex constructed with unexpected out-edges");
+
+            test1.AddInEdge("1", "A");
+            Assert.AreEqual(1, test1.InEdge.Count, "Vertex in-edge not added");
+            Assert.AreEqual(0, test1.OutEdge.Count, "Vertex in-edge adding affected out-edge");
+            Assert.IsTrue(test1.InEdge.Contains(new Pair("1", "A")), "Vertex does not contain correct in-edge");
+
+            test1.RemoveInEdge(new Pair("1", "A"));
+            Assert.AreEqual(0, test1.InEdge.Count, "Vertex in-edge not removed");
+            Assert.AreEqual(0, test1.OutEdge.Count, "Vertex in-edge removing affected out-edges");
+
+            test1.AddOutEdge("2", "B");
+            Assert.AreEqual(0, test1.InEdge.Count, "Vertex out-edge adding affected in-edge");
+            Assert.AreEqual(1, test1.OutEdge.Count, "Vertex out-edge not added");
+            Assert.IsTrue(test1.OutEdge.Contains(new Pair("2", "B")), "Vertex does not contain correct out-edge");
+
+            test1.RemoveOutEdge(new Pair("2", "B"));
+            Assert.AreEqual(0, test1.InEdge.Count, "Vertex out-edge removing affected in-edges");
+            Assert.AreEqual(0, test1.OutEdge.Count, "Vertex out-edge not removed");
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GIS_Graph_Transformation
 {
-    class VertexToEdge
+    public class VertexToEdge
     {
         private string vertex;
         private Dictionary<string, KeyValuePair<string, string> > addedEdges;
