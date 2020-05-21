@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,10 +45,13 @@ namespace GIS_Graph_Transformation
             outputVisualizer.Visualize(graph, "Test Output graph");
             */
 
-            Dictionary<string, Vertex> graph = dio.LoadGraph();
-            //Dictionary<string, Vertex> graph = dio.GenerateGraph(renumerate: true);
+            //Dictionary<string, Vertex> graph = dio.LoadGraph();
+            Dictionary<string, Vertex> graph = dio.GenerateGraph(4, renumerate: true, generatedFile:"testGenerated.txt");
             inputVisualizer.Visualize(graph, "Test Generated graph");
-            outputVisualizer.Visualize(vte.Transform(graph), "Vertex to edge graph");
+            Dictionary<string, Vertex> outG = vte.Transform(graph);
+            dio.SaveGraph(outG, "testOutput.txt");
+            outputVisualizer.Visualize(outG, "Vertex to edge graph");
+            
 
             /* Nie działa, bo coś te podprogramy się nie zamykają jak powinny
             Task[] tasks = new Task[2];

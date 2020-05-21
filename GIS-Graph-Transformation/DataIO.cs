@@ -1,12 +1,11 @@
-﻿using Microsoft.Msagl.Drawing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace GIS_Graph_Transformation
 {
-    class DataIO
+    public class DataIO
     {
         public Dictionary<string, Vertex> LoadGraph(string fileName = "input.txt")
         {
@@ -63,7 +62,7 @@ namespace GIS_Graph_Transformation
             }
         }
 
-        public Dictionary<string, Vertex> GenerateGraph(int vertexCount = 30, int maxVertexDistance = 3, bool renumerate = false)
+        public Dictionary<string, Vertex> GenerateGraph(int vertexCount = 30, int maxVertexDistance = 3, bool renumerate = false, string generatedFile = "")
         {
             Dictionary<string, Vertex> graph = new Dictionary<string, Vertex>();
             string graphString = "";
@@ -134,8 +133,22 @@ namespace GIS_Graph_Transformation
                 for (int i = 0; i < edges.Length; ++i)
                     edges[i] = idMapping[int.Parse(edges[i])].ToString();
 
+                graphString = string.Join(" ", edges);
+
                 // convert graph string representation to dictionary representation
                 graph = StringsToGraph(edges);
+            }
+
+            if(!string.IsNullOrEmpty(generatedFile))
+            {
+                using (StreamWriter file = new StreamWriter(generatedFile))
+                {
+                    string[] edges = graphString.Trim()
+                        .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    for (int i = 0; i < edges.Length; i+=2)
+                        file.WriteLine($"{edges[i]} {edges[i+1]}");
+                }
             }
 
             return graph;

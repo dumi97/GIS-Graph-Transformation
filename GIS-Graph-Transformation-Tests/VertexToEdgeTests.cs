@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using GIS_Graph_Transformation;
 
@@ -13,24 +12,28 @@ namespace GIS_Graph_Transformation_Tests
         public void Setup()
         {
             // test graph 1
-            _g1 = new Dictionary<string, Vertex>();
-            _g1["1"] = new Vertex();
-            _g1["2"] = new Vertex();
-            _g1["3"] = new Vertex();
+            _g1 = new Dictionary<string, Vertex>
+            {
+                ["1"] = new Vertex(),
+                ["2"] = new Vertex(),
+                ["3"] = new Vertex()
+            };
             _g1["1"].AddOutEdge(" ", "3");
             _g1["3"].AddInEdge(" ", "1");
             _g1["2"].AddOutEdge(" ", "3");
             _g1["3"].AddInEdge(" ", "2");
 
             // test graph 2
-            _g2 = new Dictionary<string, Vertex>();
-            _g2["1"] = new Vertex();
-            _g2["2"] = new Vertex();
-            _g2["3"] = new Vertex();
-            _g2["4"] = new Vertex();
-            _g2["5"] = new Vertex();
-            _g2["6"] = new Vertex();
-            _g2["7"] = new Vertex();
+            _g2 = new Dictionary<string, Vertex>
+            {
+                ["1"] = new Vertex(),
+                ["2"] = new Vertex(),
+                ["3"] = new Vertex(),
+                ["4"] = new Vertex(),
+                ["5"] = new Vertex(),
+                ["6"] = new Vertex(),
+                ["7"] = new Vertex()
+            };
             _g2["1"].AddOutEdge(" ", "4");
             _g2["4"].AddInEdge(" ", "1");
             _g2["1"].AddOutEdge(" ", "7");
