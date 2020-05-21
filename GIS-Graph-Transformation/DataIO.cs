@@ -10,10 +10,10 @@ namespace GIS_Graph_Transformation
         public Dictionary<string, Vertex> LoadGraph(string fileName = "input.txt")
         {
             // check if file exists, if not - generate it
-            if (!File.Exists(fileName))
+            if (string.IsNullOrEmpty(fileName) || !File.Exists(fileName))
             {
-                Console.WriteLine($"[WARNING] File \"{fileName}\" does not exist. Generating random data.");
-                return GenerateGraph();
+                Console.WriteLine($"[ERROR] File \"{fileName}\" does not exist");
+                return new Dictionary<string, Vertex>();
             }
 
             // load data from file
@@ -30,7 +30,7 @@ namespace GIS_Graph_Transformation
             // check if data is valid
             if (graphStrings.Length % 2 != 0)
             {
-                Console.WriteLine("[WARNING] Input graph invalid - one edge has no target vertex");
+                Console.WriteLine("[ERROR] Input graph invalid - one edge has no target vertex");
                 return graph;
             }
 
@@ -54,6 +54,9 @@ namespace GIS_Graph_Transformation
 
         public void SaveGraph(Dictionary<string, Vertex> graph, string fileName="output.txt")
         {
+            if (string.IsNullOrEmpty(fileName))
+                return;
+
             using (StreamWriter file = new StreamWriter(fileName))
             {
                 foreach (KeyValuePair<string, Vertex> v in graph)

@@ -7,7 +7,7 @@
     <ProjectGuid>{2E48D0B4-1BDB-4DFA-BF1B-4CE650DC9FDC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>GIS_Graph_Transformation</RootNamespace>
-    <AssemblyName>GIS-Graph-Transformation</AssemblyName>
+    <AssemblyName>gis_gt</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -45,6 +45,9 @@
     </Reference>
     <Reference Include="Microsoft.Msagl.WpfGraphControl, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutomaticGraphLayout.WpfGraphControl.1.1.6\lib\net472\Microsoft.Msagl.WpfGraphControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Options, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Options.6.6.0.161\lib\net40\Mono.Options.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
