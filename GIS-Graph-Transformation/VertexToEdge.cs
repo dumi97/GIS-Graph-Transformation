@@ -38,21 +38,21 @@ namespace GIS_Graph_Transformation
 
             while (V.Count > 0)
             {
-                //FIFO pierwszy wierzchołek
+                // FIFO - first edge
                 string v = V.Dequeue();
-                //Weź poprzedniki i następniki z oryginalnego grafu
+                // take antecedents and consequents from original graph
                 Vertex value;
                 inputGraph.TryGetValue(v, out value);
-                //Znajdź krawędź, która może już istnieć
+                // find edge that may already exist
                 KeyValuePair<string, string> valuePair;
                 addedEdges.TryGetValue(v, out valuePair);
 
-                //Przejrzyj następniki wierzchołka z FIFO
+                // look through consequents of edge from FIFO
                 for (int i=0; i<value.OutEdge.Count; ++i)
                 {
                     Vertex valueNext;
                     inputGraph.TryGetValue(value.OutEdge[i].Vertex, out valueNext);
-                    //Sprawdź czy następnik ma już krawędź
+                    // check if consequent already has edge
                     bool ifExist = false;
                     KeyValuePair<string, string> valuePairNext;
                     addedEdges.TryGetValue(value.OutEdge[i].Vertex, out valuePairNext);
@@ -83,7 +83,7 @@ namespace GIS_Graph_Transformation
                     }
                 }
             }
-            //Krok naprawczy
+            // repair step
             List<string> toDelete = new List<string>();
             foreach (string g in graph.Keys)
             {
@@ -130,7 +130,7 @@ namespace GIS_Graph_Transformation
             IncrementVertex();
         }
 
-        // Alphabetical increment for edges
+        // alphabetical increment for edges
         private void IncrementVertex()
         {
             for(int i=vertex.Length-1; i>=0; i--)
