@@ -131,22 +131,6 @@ namespace GIS_Graph_Transformation
                 outputVisualizer.Visualize(outG, "Vertex to edge graph");
             }
             Console.WriteLine("Finished");
-
-            /* Nie działa, bo coś te podprogramy się nie zamykają jak powinny
-            Task[] tasks = new Task[2];
-            tasks[0] = Task.Run(() => { inputVisualizer.Visualize(graph, "Test Generated graph"); });
-            tasks[1] = Task.Run(() => { outputVisualizer.Visualize(vte.Transform(graph), "Vertex to edge graph"); });
-            try
-            {
-                Task.WaitAll(tasks);
-            }
-            catch (AggregateException ae)
-            {
-                Console.WriteLine("One or more exceptions occurred: ");
-                foreach (var ex in ae.Flatten().InnerExceptions)
-                    Console.WriteLine("   {0}", ex.Message);
-            }
-            */
         }
 
         private static void ShowHelp(OptionSet p)
