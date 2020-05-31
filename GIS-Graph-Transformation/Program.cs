@@ -12,7 +12,7 @@ namespace GIS_Graph_Transformation
         static void Main(string[] args)
         {
             // cmd argument variables
-            bool showHelp = false;
+            bool showHelp = false, textOnly = false;
             bool generateData = false;
             bool renumerate = false, reletter = false;
             string genFileName = "";
@@ -50,6 +50,8 @@ namespace GIS_Graph_Transformation
                     "type \"\" for no output file\n" +
                     "default: output.txt",
                     (string v) => outputFile = v },
+                { "t", "text only, do not visualise the input and output graphs\n",
+                    v => textOnly = v != null },
                 { "h|help",  "show this message and exit",
                     v => showHelp = v != null },
             };
@@ -105,9 +107,13 @@ namespace GIS_Graph_Transformation
             if (graph.Count == 0)
                 return;
 
-            Console.WriteLine("Visualizing input graph...");
-            inputVisualizer.Visualize(graph, "Test Generated graph");
+            if(!textOnly)
+            {
+                Console.WriteLine("Visualizing input graph...");
+                inputVisualizer.Visualize(graph, "Input graph");
+            }
 
+            Console.WriteLine("Transforming input graph...");
             watch.Start();
             Dictionary<string, Vertex> outG = vte.Transform(graph, reletter);
             watch.Stop();
@@ -119,8 +125,11 @@ namespace GIS_Graph_Transformation
                 dio.SaveGraph(outG, outputFile);
             }
 
-            Console.WriteLine("Visualizing output graph...");
-            outputVisualizer.Visualize(outG, "Vertex to edge graph");
+            if(!textOnly)
+            {
+                Console.WriteLine("Visualizing output graph...");
+                outputVisualizer.Visualize(outG, "Vertex to edge graph");
+            }
             Console.WriteLine("Finished");
 
             /* Nie działa, bo coś te podprogramy się nie zamykają jak powinny
